@@ -2,204 +2,197 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Suivi Nutrition & Muscu</title>
+<title>Calculateur Nutrition Sportif</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  /* --- Fond et typo générale --- */
   body {
-    font-family: 'Arial', sans-serif;
-    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Black', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
     text-align: center;
-    padding: 20px;
   }
 
   h1 {
-    font-size: 40px;
-    color: #222;
-    margin-bottom: 20px;
+    font-size: 48px;
+    margin-top: 30px;
+    color: #00ffcc;
+    text-shadow: 2px 2px #000;
+    animation: pulse 2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  /* --- Formulaire et boutons --- */
+  .form-container {
+    margin: 30px auto;
+    padding: 24px;
+    width: 92%;
+    max-width: 680px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 16px;
+    box-shadow: 0 0 20px #00ffcc;
   }
 
   label {
     display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-  }
-
-  input, select {
-    font-size: 16px;
-    padding: 5px;
-    width: 150px;
-    margin-bottom: 10px;
-  }
-
-  button {
+    margin: 12px 0 6px;
     font-size: 18px;
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
-    border-radius: 10px;
-    border: none;
-    background-color: #0078d4;
-    color: white;
-    transition: 0.3s;
   }
 
-  button:hover {
-    background-color: #005fa3;
-  }
-
-  #result {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #333;
-  }
-
-  table {
-    margin: 20px auto;
-    border-collapse: collapse;
+  input[type="number"], select {
     width: 80%;
-    max-width: 600px;
-  }
-
-  th, td {
-    border: 1px solid #0078d4;
-    padding: 8px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 12px;
     text-align: center;
   }
 
-  th {
-    background-color: #0078d4;
-    color: white;
+  .controls {
+    margin-top: 12px;
   }
 
+  .button {
+    display: inline-block;
+    margin: 8px;
+    padding: 14px 22px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: #ff4500;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 12px #ff4500;
+    transition: 0.15s all;
+  }
+
+  .button:hover { transform: scale(1.05); box-shadow: 0 0 22px #ffae42; }
+
+  .result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 12px #00ffcc;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .result h2 { color: #ffae42; margin-bottom: 10px; }
+
+  .seche { border-left: 8px solid #ff0000; }
+  .maintien { border-left: 8px solid #00ff00; }
+  .pdm { border-left: 8px solid #ffd700; }
+
+  .link-secondary {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: transparent;
+    color: #00ffcc;
+    border: 1px solid rgba(0,255,204,0.15);
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .meta {
+    margin-top: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+  }
 </style>
 </head>
 <body>
 
-<h1>Suivi Nutrition & Muscu</h1>
+<h1>💪 Calculateur Nutrition Sportif</h1>
 
-<label for="poids">Poids (kg)</label>
-<input type="number" id="poids" value="80">
+<div class="form-container">
+  <label for="sexe">Sexe</label>
+  <select id="sexe">
+    <option value="homme">Homme</option>
+    <option value="femme">Femme</option>
+  </select>
 
-<label for="taille">Taille (cm)</label>
-<input type="number" id="taille" value="180">
+  <label for="age">Âge</label>
+  <input type="number" id="age" min="15" max="80" value="25">
 
-<label for="age">Âge (ans)</label>
-<input type="number" id="age" value="25">
+  <label for="poids">Poids (kg)</label>
+  <input type="number" id="poids" min="30" max="200" value="80">
 
-<label for="sexe">Sexe</label>
-<select id="sexe">
-  <option value="homme">Homme</option>
-  <option value="femme">Femme</option>
-</select>
+  <label for="taille">Taille (cm)</label>
+  <input type="number" id="taille" min="120" max="250" value="180">
 
-<label for="activite">Niveau d'activité</label>
-<select id="activite">
-  <option value="1.2">Sédentaire</option>
-  <option value="1.375">Légère</option>
-  <option value="1.55" selected>Modérée</option>
-  <option value="1.725">Intense</option>
-  <option value="1.9">Très intense</option>
-</select>
+  <label for="activite">Niveau d'activité (PAL)</label>
+  <select id="activite">
+    <option value="1.2">Sédentaire</option>
+    <option value="1.375">Légère</option>
+    <option value="1.55">Modérée</option>
+    <option value="1.725">Intense</option>
+    <option value="1.9">Très intense</option>
+  </select>
 
-<label for="objectif">Objectif</label>
-<select id="objectif">
-  <option value="pdm">Prise de masse</option>
-  <option value="seche">Sèche</option>
-  <option value="maintient">Maintien</option>
-</select>
+  <div class="controls">
+    <button class="button" onclick="calcul('seche')">Sèche</button>
+    <button class="button" onclick="calcul('maintien')">Maintien</button>
+    <button class="button" onclick="calcul('pdm')">Prise de masse</button>
+    <a class="link-secondary" href="interpretation.html">→ Interprétation & équivalences (page 2)</a>
+  </div>
 
-<br>
-<button onclick="calculer()">Calculer</button>
-<button onclick="resetHistory()">Réinitialiser l'historique</button>
-
-<div id="result"></div>
-
-<h2>Historique</h2>
-<table id="historyTable">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Calories</th>
-      <th>Protéines (g)</th>
-      <th>Lipides (g)</th>
-      <th>Glucides (g)</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <div id="resultats" class="result"></div>
+  <div class="meta">Calcul basé sur Mifflin-St Jeor + PAL. Ratios de macros fournis en % (protéines / glucides / lipides).</div>
+</div>
 
 <script>
-function calculer() {
-  const poids = parseFloat(document.getElementById('poids').value);
-  const taille = parseFloat(document.getElementById('taille').value);
-  const age = parseInt(document.getElementById('age').value);
+function calcul(objectif) {
   const sexe = document.getElementById('sexe').value;
-  const activite = parseFloat(document.getElementById('activite').value);
-  const objectif = document.getElementById('objectif').value;
+  const age = parseInt(document.getElementById('age').value) || 25;
+  const poids = parseFloat(document.getElementById('poids').value) || 80;
+  const taille = parseFloat(document.getElementById('taille').value) || 180;
+  const activite = parseFloat(document.getElementById('activite').value) || 1.55;
 
-  if(isNaN(poids) || isNaN(taille) || isNaN(age)) {
-    alert("Veuillez remplir tous les champs avec des nombres valides !");
-    return;
-  }
+  // BMR Mifflin-St Jeor
+  let bmr;
+  if (sexe === 'homme') bmr = 10 * poids + 6.25 * taille - 5 * age + 5;
+  else bmr = 10 * poids + 6.25 * taille - 5 * age - 161;
 
-  // Calcul BMR (Mifflin-St Jeor)
-  let bmr = (sexe === 'homme') ? 
-            (10*poids + 6.25*taille - 5*age + 5) :
-            (10*poids + 6.25*taille - 5*age -161);
+  // Total calories
+  let calTot = Math.round(bmr * activite);
 
-  let calories = Math.round(bmr * activite);
+  // Ajustement selon objectif
+  if (objectif === 'seche') calTot = Math.round(calTot - 300);
+  else if (objectif === 'pdm') calTot = Math.round(calTot + 400);
 
-  // Protéines g/kg selon objectif
-  let proteines;
-  if(objectif === 'pdm') proteines = Math.round(poids * 2);
-  else if(objectif === 'seche') proteines = Math.round(poids * 1.2);
-  else proteines = Math.round(poids * 1.8);
+  // Ratios en % (on affiche uniquement les %)
+  const configs = {
+    seche: { pctProt: 35, pctGlu: 35, pctLip: 30 },
+    maintien: { pctProt: 25, pctGlu: 50, pctLip: 25 },
+    pdm: { pctProt: 25, pctGlu: 55, pctLip: 20 }
+  };
+  const conf = configs[objectif];
 
-  // Lipides 0.8-1 g/kg
-  let lipides = Math.round(poids * 0.9);
-
-  // Glucides = reste des calories
-  let glucides = Math.round((calories - (proteines*4 + lipides*9))/4);
-  if(glucides < 0) glucides = 0;
-
-  // Affichage
-  document.getElementById('result').innerHTML = `
-    <strong>Calories :</strong> ${calories} kcal<br>
-    <strong>Protéines :</strong> ${proteines} g<br>
-    <strong>Lipides :</strong> ${lipides} g<br>
-    <strong>Glucides :</strong> ${glucides} g
+  // Affichage propre, sans grammes
+  const resultDiv = document.getElementById('resultats');
+  resultDiv.className = 'result ' + objectif;
+  resultDiv.innerHTML = `
+    <h2>${objectif.toUpperCase()}</h2>
+    <strong>Calories totales :</strong> ${calTot} kcal<br>
+    <strong>Répartition (en %)</strong><br>
+    Protéines : ${conf.pctProt}%<br>
+    Glucides : ${conf.pctGlu}%<br>
+    Lipides : ${conf.pctLip}%<br><br>
+    <em>Utilise le lien "Interprétation & équivalences" pour traduire ces calories en portions et portions standards.</em>
   `;
-
-  // Ajouter à l'historique localStorage
-  const today = new Date().toLocaleDateString();
-  const entry = { date: today, calories, proteines, lipides, glucides };
-
-  let history = JSON.parse(localStorage.getItem('nutritionHistory')) || [];
-  history.push(entry);
-  localStorage.setItem('nutritionHistory', JSON.stringify(history));
-
-  afficherHistorique();
 }
-
-function afficherHistorique() {
-  const tbody = document.querySelector("#historyTable tbody");
-  tbody.innerHTML = '';
-  const history = JSON.parse(localStorage.getItem('nutritionHistory')) || [];
-  history.forEach(e => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${e.date}</td><td>${e.calories}</td><td>${e.proteines}</td><td>${e.lipides}</td><td>${e.glucides}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function resetHistory() {
-  if(confirm("Voulez-vous vraiment effacer l'historique ?")) {
-    localStorage.removeItem('nutritionHistory');
-    afficherHistorique();
-  }
-}
-
-// Charger l'historique au lancement
-afficherHistorique();
 </script>
 
 </body>
