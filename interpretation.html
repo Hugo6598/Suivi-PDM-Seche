@@ -1,102 +1,158 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Équivalences alimentaires</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 40px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #f2f2f2; }
-        input[type="number"] { width: 70px; }
-        .cat { background: #d1ecf1; font-weight: bold; text-transform: uppercase; }
-        #total { font-size: 20px; font-weight: bold; margin-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<title>Interprétation & Équivalences</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Black', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 48px;
+    margin-top: 30px;
+    color: #00ffcc;
+    text-shadow: 2px 2px #000;
+    animation: pulse 2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  .table-container {
+    margin: 30px auto;
+    padding: 20px;
+    width: 95%;
+    max-width: 900px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 16px;
+    box-shadow: 0 0 20px #00ffcc;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+
+  table th, table td {
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+  }
+
+  table th {
+    background: rgba(255,255,255,0.1);
+  }
+
+  input[type="number"] {
+    width: 70px;
+    padding: 5px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+  }
+
+  .total {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .link-primary {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: #ff4500;
+    color: #fff;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .link-primary:hover {
+    background: #ffae42;
+    color: #000;
+  }
+</style>
 </head>
 <body>
 
-    <h1>Équivalences alimentaires</h1>
+<h1>🍽 Interprétation & Équivalences</h1>
 
-    <p>
-        Sélectionne les quantités souhaitées, le tableau calcule automatiquement l’énergie totale.
-        Les aliments sont classés par familles nutritionnelles.
-    </p>
+<div class="table-container">
+  <table id="aliment-table">
+    <thead>
+      <tr>
+        <th>Famille</th>
+        <th>Aliment</th>
+        <th>Glucides (g / 100g)</th>
+        <th>Lipides (g / 100g)</th>
+        <th>Protéines (g / 100g)</th>
+        <th>Énergie (kcal / 100g)</th>
+        <th>Quantité (g)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- --- Protéines --- -->
+      <tr><td>Protéines</td><td>Blanc de poulet</td><td>0</td><td>2</td><td>31</td><td>165</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Protéines</td><td>Steak 5% MG</td><td>0</td><td>5</td><td>26</td><td>155</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Protéines</td><td>Thon nature</td><td>0</td><td>1</td><td>23</td><td>100</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Protéines</td><td>Œufs</td><td>1</td><td>11</td><td>13</td><td>150</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
 
-    <table id="nutriTable">
-        <thead>
-            <tr>
-                <th>Catégorie</th>
-                <th>Aliment</th>
-                <th>Glucides (g)</th>
-                <th>Lipides (g)</th>
-                <th>Protéines (g)</th>
-                <th>DA (g)</th>
-                <th>Énergie (kcal / 100g)</th>
-                <th>Quantité (g)</th>
-            </tr>
-        </thead>
+      <!-- --- Glucides --- -->
+      <tr><td>Glucides</td><td>Avoine</td><td>60</td><td>7</td><td>13</td><td>380</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Glucides</td><td>Riz complet cuit</td><td>23</td><td>1</td><td>2.5</td><td>110</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Glucides</td><td>Pâtes cuites</td><td>25</td><td>1</td><td>5</td><td>130</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Glucides</td><td>Patate douce</td><td>20</td><td>0</td><td>1.6</td><td>90</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Glucides</td><td>Lentilles cuites</td><td>20</td><td>0.4</td><td>9</td><td>115</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Glucides</td><td>Pois chiches cuits</td><td>27</td><td>3</td><td>9</td><td>165</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
 
-        <tbody>
-            <!-- PROTÉINES -->
-            <tr class="cat"><td colspan="8">PROTÉINES</td></tr>
-            <tr><td>Protéine</td><td>Blanc de poulet</td><td>0</td><td>2</td><td>31</td><td>100</td><td data-kcal="165">165</td><td><input type="number"></td></tr>
-            <tr><td>Protéine</td><td>Steak 5%</td><td>0</td><td>5</td><td>26</td><td>100</td><td data-kcal="155">155</td><td><input type="number"></td></tr>
-            <tr><td>Protéine</td><td>Saumon</td><td>0</td><td>13</td><td>20</td><td>100</td><td data-kcal="210">210</td><td><input type="number"></td></tr>
-            <tr><td>Protéine</td><td>Thon nature</td><td>0</td><td>1</td><td>23</td><td>100</td><td data-kcal="100">100</td><td><input type="number"></td></tr>
-            <tr><td>Protéine</td><td>Œufs</td><td>1</td><td>11</td><td>13</td><td>100</td><td data-kcal="150">150</td><td><input type="number"></td></tr>
-            <tr><td>Protéine</td><td>Tofu ferme</td><td>2</td><td>5</td><td>12</td><td>100</td><td data-kcal="95">95</td><td><input type="number"></td></tr>
+      <!-- --- Lipides --- -->
+      <tr><td>Lipides</td><td>Amandes</td><td>7</td><td>49</td><td>21</td><td>575</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Lipides</td><td>Avocat</td><td>2</td><td>15</td><td>2</td><td>160</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
 
-            <!-- GLUCIDES -->
-            <tr class="cat"><td colspan="8">GLUCIDES / FÉCULENTS</td></tr>
-            <tr><td>Glucide</td><td>Avoine</td><td>60</td><td>7</td><td>13</td><td>100</td><td data-kcal="380">380</td><td><input type="number"></td></tr>
-            <tr><td>Glucide</td><td>Riz complet cuit</td><td>23</td><td>1</td><td>2.5</td><td>100</td><td data-kcal="110">110</td><td><input type="number"></td></tr>
-            <tr><td>Glucide</td><td>Pâtes cuites</td><td>25</td><td>1</td><td>5</td><td>100</td><td data-kcal="130">130</td><td><input type="number"></td></tr>
-            <tr><td>Glucide</td><td>Patate douce</td><td>20</td><td>0</td><td>1.6</td><td>100</td><td data-kcal="90">90</td><td><input type="number"></td></tr>
-            <tr><td>Glucide</td><td>Lentilles cuites</td><td>20</td><td>0.4</td><td>9</td><td>100</td><td data-kcal="115">115</td><td><input type="number"></td></tr>
-            <tr><td>Glucide</td><td>Pain complet</td><td>42</td><td>3</td><td>9</td><td>100</td><td data-kcal="250">250</td><td><input type="number"></td></tr>
+      <!-- --- Fruits --- -->
+      <tr><td>Fruits</td><td>Pomme</td><td>14</td><td>0</td><td>0.3</td><td>52</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Fruits</td><td>Banane</td><td>23</td><td>0.3</td><td>1.1</td><td>95</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
 
-            <!-- LIPIDES -->
-            <tr class="cat"><td colspan="8">LIPIDES</td></tr>
-            <tr><td>Lipide</td><td>Amandes</td><td>7</td><td>49</td><td>21</td><td>100</td><td data-kcal="575">575</td><td><input type="number"></td></tr>
-            <tr><td>Lipide</td><td>Noix</td><td>7</td><td>65</td><td>15</td><td>100</td><td data-kcal="650">650</td><td><input type="number"></td></tr>
-            <tr><td>Lipide</td><td>Avocat</td><td>2</td><td>15</td><td>2</td><td>100</td><td data-kcal="160">160</td><td><input type="number"></td></tr>
-            <tr><td>Lipide</td><td>Huile d’olive</td><td>0</td><td>100</td><td>0</td><td>100</td><td data-kcal="900">900</td><td><input type="number"></td></tr>
+      <!-- --- Légumes --- -->
+      <tr><td>Légumes</td><td>Brocoli</td><td>7</td><td>0.4</td><td>3</td><td>35</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Légumes</td><td>Tomates</td><td>3</td><td>0.2</td><td>1</td><td>18</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Légumes</td><td>Carottes</td><td>10</td><td>0.2</td><td>1</td><td>41</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+      <tr><td>Légumes</td><td>Épinards</td><td>3.6</td><td>0.4</td><td>2.9</td><td>23</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
+    </tbody>
+  </table>
 
-            <!-- FRUITS -->
-            <tr class="cat"><td colspan="8">FRUITS</td></tr>
-            <tr><td>Fruit</td><td>Pomme</td><td>14</td><td>0</td><td>0.3</td><td>100</td><td data-kcal="52">52</td><td><input type="number"></td></tr>
-            <tr><td>Fruit</td><td>Banane</td><td>23</td><td>0.3</td><td>1.1</td><td>100</td><td data-kcal="95">95</td><td><input type="number"></td></tr>
-            <tr><td>Fruit</td><td>Fraises</td><td>7</td><td>0.3</td><td>0.7</td><td>100</td><td data-kcal="32">32</td><td><input type="number"></td></tr>
-            <tr><td>Fruit</td><td>Orange</td><td>12</td><td>0.2</td><td>1</td><td>100</td><td data-kcal="47">47</td><td><input type="number"></td></tr>
+  <div class="total">
+    Total calories sélectionnées : <span id="total-cal">0</span> kcal
+  </div>
 
-            <!-- LÉGUMES -->
-            <tr class="cat"><td colspan="8">LÉGUMES</td></tr>
-            <tr><td>Légume</td><td>Brocoli</td><td>7</td><td>0.4</td><td>3</td><td>100</td><td data-kcal="35">35</td><td><input type="number"></td></tr>
-            <tr><td>Légume</td><td>Tomates</td><td>3</td><td>0.2</td><td>1</td><td>100</td><td data-kcal="18">18</td><td><input type="number"></td></tr>
-            <tr><td>Légume</td><td>Carottes</td><td>10</td><td>0.2</td><td>0.9</td><td>100</td><td data-kcal="41">41</td><td><input type="number"></td></tr>
-            <tr><td>Légume</td><td>Courgettes</td><td>3</td><td>0.3</td><td>1.2</td><td>100</td><td data-kcal="17">17</td><td><input type="number"></td></tr>
+  <a class="link-primary" href="index.html">← Retour calculateur (page 1)</a>
+</div>
 
-        </tbody>
-    </table>
-
-    <div id="total">Total calories: 0 kcal</div>
-
-    <script>
-        const inputs = document.querySelectorAll('input[type="number"]');
-        const totalDisplay = document.getElementById("total");
-
-        inputs.forEach(input => {
-            input.addEventListener("input", () => {
-                let total = 0;
-                document.querySelectorAll("#nutriTable tbody tr").forEach(row => {
-                    const kcal100 = parseFloat(row.querySelector("td[data-kcal]")?.dataset.kcal || 0);
-                    const grams = parseFloat(row.querySelector("input")?.value || 0);
-                    total += (kcal100 * grams) / 100;
-                });
-                totalDisplay.textContent = "Total calories: " + Math.round(total) + " kcal";
-            });
-        });
-    </script>
+<script>
+function updateTotal() {
+  const rows = document.querySelectorAll('#aliment-table tbody tr');
+  let total = 0;
+  rows.forEach(row => {
+    const kcal = parseFloat(row.cells[5].innerText);
+    const qty = parseFloat(row.cells[6].querySelector('input').value) || 0;
+    total += (kcal / 100) * qty;
+  });
+  document.getElementById('total-cal').innerText = Math.round(total);
+}
+</script>
 
 </body>
 </html>
