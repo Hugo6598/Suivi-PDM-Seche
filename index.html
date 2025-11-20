@@ -2,129 +2,130 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Suivi PDM / Sèche</title>
+<title>Suivi Nutrition & Muscu</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  text-align: center;
-  margin:0;
-  padding:0;
-}
+  body {
+    font-family: 'Arial', sans-serif;
+    background: #f5f5f5;
+    text-align: center;
+    padding: 20px;
+  }
 
-h1 {
-  margin-top: 20px;
-}
+  h1 {
+    font-size: 40px;
+    color: #222;
+    margin-bottom: 20px;
+  }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-}
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
 
-input, select, button {
-  padding: 10px;
-  margin: 10px 0;
-  font-size: 16px;
-}
+  input, select {
+    font-size: 16px;
+    padding: 5px;
+    width: 150px;
+    margin-bottom: 10px;
+  }
 
-.result {
-  margin-top: 20px;
-  font-size: 20px;
-  font-weight: bold;
-}
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    background-color: #0078d4;
+    color: white;
+    transition: 0.3s;
+  }
 
-#history {
-  margin-top: 30px;
-  text-align: left;
-}
+  button:hover {
+    background-color: #005fa3;
+  }
 
-#history table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  #result {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #333;
+  }
 
-#history th, #history td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
-}
+  table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 600px;
+  }
 
-.reset-btn {
-  margin-top: 20px;
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-}
+  th, td {
+    border: 1px solid #0078d4;
+    padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #0078d4;
+    color: white;
+  }
+
 </style>
 </head>
 <body>
 
-<h1>💪 Suivi PDM / Sèche 💪</h1>
-<div class="container">
-  <label>Poids (kg):</label><br>
-  <input type="number" id="poids" placeholder="ex: 84"><br>
+<h1>Suivi Nutrition & Muscu</h1>
 
-  <label>Taille (cm):</label><br>
-  <input type="number" id="taille" placeholder="ex: 184"><br>
+<label for="poids">Poids (kg)</label>
+<input type="number" id="poids" value="80">
 
-  <label>Âge:</label><br>
-  <input type="number" id="age" placeholder="ex: 22"><br>
+<label for="taille">Taille (cm)</label>
+<input type="number" id="taille" value="180">
 
-  <label>Sexe:</label><br>
-  <select id="sexe">
-    <option value="homme">Homme</option>
-    <option value="femme">Femme</option>
-  </select><br>
+<label for="age">Âge (ans)</label>
+<input type="number" id="age" value="25">
 
-  <label>Niveau d'activité:</label><br>
-  <select id="activite">
-    <option value="1.2">Sédentaire</option>
-    <option value="1.375">Légère</option>
-    <option value="1.55">Modérée</option>
-    <option value="1.725">Intense</option>
-    <option value="1.9">Très intense</option>
-  </select><br>
+<label for="sexe">Sexe</label>
+<select id="sexe">
+  <option value="homme">Homme</option>
+  <option value="femme">Femme</option>
+</select>
 
-<label>Objectif:</label><br>
+<label for="activite">Niveau d'activité</label>
+<select id="activite">
+  <option value="1.2">Sédentaire</option>
+  <option value="1.375">Légère</option>
+  <option value="1.55" selected>Modérée</option>
+  <option value="1.725">Intense</option>
+  <option value="1.9">Très intense</option>
+</select>
+
+<label for="objectif">Objectif</label>
 <select id="objectif">
   <option value="pdm">Prise de masse</option>
   <option value="seche">Sèche</option>
-  <option value="maintient">Maintient</option>
-</select><br>
+  <option value="maintient">Maintien</option>
+</select>
 
-  <button onclick="calculer()">Calculer 🔥</button>
+<br>
+<button onclick="calculer()">Calculer</button>
+<button onclick="resetHistory()">Réinitialiser l'historique</button>
 
-  <div class="result" id="result"></div>
+<div id="result"></div>
 
-  <button class="reset-btn" onclick="resetData()">🗑️ Réinitialiser historique</button>
-
-  <div id="history">
-    <h3>Historique</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Poids (kg)</th>
-          <th>IMC</th>
-          <th>Calories/jour</th>
-          <th>Protéines</th>
-          <th>Glucides</th>
-          <th>Lipides</th>
-        </tr>
-      </thead>
-      <tbody id="historyBody">
-      </tbody>
-    </table>
-  </div>
-</div>
+<h2>Historique</h2>
+<table id="historyTable">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Calories</th>
+      <th>Protéines (g)</th>
+      <th>Lipides (g)</th>
+      <th>Glucides (g)</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script>
 function calculer() {
@@ -135,86 +136,69 @@ function calculer() {
   const activite = parseFloat(document.getElementById('activite').value);
   const objectif = document.getElementById('objectif').value;
 
-  if(!poids || !taille || !age) {
-    alert("Remplis tous les champs !");
+  if(isNaN(poids) || isNaN(taille) || isNaN(age)) {
+    alert("Veuillez remplir tous les champs avec des nombres valides !");
     return;
   }
 
-  // IMC
-  const imc = (poids / ((taille/100)**2)).toFixed(1);
-  let couleurIMC = "black";
-  if(imc < 18.5) couleurIMC = "orange";
-  else if(imc < 25) couleurIMC = "green";
-  else if(imc < 30) couleurIMC = "orange";
-  else couleurIMC = "red";
+  // Calcul BMR (Mifflin-St Jeor)
+  let bmr = (sexe === 'homme') ? 
+            (10*poids + 6.25*taille - 5*age + 5) :
+            (10*poids + 6.25*taille - 5*age -161);
 
-  // BMR (Mifflin-St Jeor)
-  let bmr;
-  if(sexe === "homme") {
-    bmr = 10*poids + 6.25*taille - 5*age + 5;
-  } else {
-    bmr = 10*poids + 6.25*taille - 5*age - 161;
-  }
+  let calories = Math.round(bmr * activite);
 
-// Besoin calorique ajusté selon objectif
-let calories = bmr * activite;
-if(objectif === "pdm") calories += 300;
-if(objectif === "seche") calories -= 300;
-// maintient = pas de modification
+  // Protéines g/kg selon objectif
+  let proteines;
+  if(objectif === 'pdm') proteines = Math.round(poids * 2);
+  else if(objectif === 'seche') proteines = Math.round(poids * 1.2);
+  else proteines = Math.round(poids * 1.8);
 
-  // Macros (standard: P=2g/kg, L=1g/kg, reste en glucides)
-  const proteines = Math.round(poids*2);
-  const lipides = Math.round(poids*1);
-  const glucides = Math.round((calories - (proteines*4 + lipides*9))/4);
+  // Lipides 0.8-1 g/kg
+  let lipides = Math.round(poids * 0.9);
 
-  const date = new Date().toLocaleDateString();
-  const entry = {date, poids, imc, calories, proteines, glucides, lipides};
+  // Glucides = reste des calories
+  let glucides = Math.round((calories - (proteines*4 + lipides*9))/4);
+  if(glucides < 0) glucides = 0;
 
-  // Stocker dans localStorage
-  let history = JSON.parse(localStorage.getItem('history')) || [];
+  // Affichage
+  document.getElementById('result').innerHTML = `
+    <strong>Calories :</strong> ${calories} kcal<br>
+    <strong>Protéines :</strong> ${proteines} g<br>
+    <strong>Lipides :</strong> ${lipides} g<br>
+    <strong>Glucides :</strong> ${glucides} g
+  `;
+
+  // Ajouter à l'historique localStorage
+  const today = new Date().toLocaleDateString();
+  const entry = { date: today, calories, proteines, lipides, glucides };
+
+  let history = JSON.parse(localStorage.getItem('nutritionHistory')) || [];
   history.push(entry);
-  localStorage.setItem('history', JSON.stringify(history));
+  localStorage.setItem('nutritionHistory', JSON.stringify(history));
 
-  afficherResult(entry);
   afficherHistorique();
 }
 
-function afficherResult(entry) {
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `
-    IMC: <span style="color:${entry.imc<18.5 || entry.imc>=30?'red':'green'}">${entry.imc}</span><br>
-    Calories/jour: ${Math.round(entry.calories)} kcal<br>
-    Protéines: ${entry.proteines}g | Glucides: ${entry.glucides}g | Lipides: ${entry.lipides}g
-  `;
-}
-
 function afficherHistorique() {
-  const tbody = document.getElementById('historyBody');
+  const tbody = document.querySelector("#historyTable tbody");
   tbody.innerHTML = '';
-  const history = JSON.parse(localStorage.getItem('history')) || [];
-  history.forEach(entry => {
-    tbody.innerHTML += `<tr>
-      <td>${entry.date}</td>
-      <td>${entry.poids}</td>
-      <td>${entry.imc}</td>
-      <td>${Math.round(entry.calories)}</td>
-      <td>${entry.proteines}</td>
-      <td>${entry.glucides}</td>
-      <td>${entry.lipides}</td>
-    </tr>`;
+  const history = JSON.parse(localStorage.getItem('nutritionHistory')) || [];
+  history.forEach(e => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${e.date}</td><td>${e.calories}</td><td>${e.proteines}</td><td>${e.lipides}</td><td>${e.glucides}</td>`;
+    tbody.appendChild(tr);
   });
 }
 
-// Réinitialiser
-function resetData() {
-  if(confirm("Supprimer tout l'historique ?")) {
-    localStorage.removeItem('history');
+function resetHistory() {
+  if(confirm("Voulez-vous vraiment effacer l'historique ?")) {
+    localStorage.removeItem('nutritionHistory');
     afficherHistorique();
-    document.getElementById('result').innerHTML = '';
   }
 }
 
-// Afficher historique au chargement
+// Charger l'historique au lancement
 afficherHistorique();
 </script>
 
