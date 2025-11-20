@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Suivi PDM / Sèche</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  text-align: center;
+  margin:0;
+  padding:0;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+input, select, button {
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#history {
+  margin-top: 30px;
+  text-align: left;
+}
+
+#history table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#history th, #history td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.reset-btn {
+  margin-top: 20px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>💪 Suivi PDM / Sèche 💪</h1>
+<div class="container">
+  <label>Poids (kg):</label><br>
+  <input type="number" id="poids" placeholder="ex: 84"><br>
+
+  <label>Taille (cm):</label><br>
+  <input type="number" id="taille" placeholder="ex: 184"><br>
+
+  <label>Âge:</label><br>
+  <input type="number" id="age" placeholder="ex: 22"><br>
+
+  <label>Sexe:</label><br>
+  <select id="sexe">
+    <option value="homme">Homme</option>
+    <option value="femme">Femme</option>
+  </select><br>
+
+  <label>Niveau d'activité:</label><br>
+  <select id="activite">
+    <option value="1.2">Sédentaire</option>
+    <option value="1.375">Légère</option>
+    <option value="1.55">Modérée</option>
+    <option value="1.725">Intense</option>
+    <option value="1.9">Très intense</option>
+  </select><br>
+
+  <label>Objectif:</label><br>
+  <select id="objectif">
+    <option value="pdm">Prise de masse</option>
+    <option value="seche">Sèche</option>
+  </select><br>
+
+  <button onclick="calculer()">Calculer 🔥</button>
+
+  <div class="result" id="result"></div>
+
+  <button class="reset-btn" onclick="resetData()">🗑️ Réinitialiser historique</button>
+
+  <div id="history">
+    <h3>Historique</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Poids (kg)</th>
+          <th>IMC</th>
+          <th>Calories/jour</th>
+          <th>Protéines</th>
+          <th>Glucides</th>
+          <th>Lipides</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function calculer() {
+  const poids = parseFloat(document.getElementById('poids').value);
+  const taille = parseFloat(document.getElementById('taille').value);
+  const age = parseInt(document.getElementById('age').value);
+  const sexe = document.getElementById('sexe').value;
+  const activite = parseFloat(document.getElementById('activite').value);
+  const objectif = document.getElementById('objectif').value;
+
+  if(!poids || !taille || !age) {
+    alert("Remplis tous les champs !");
+    return;
+  }
+
+  // IMC
+  const imc = (poids / ((taille/100)**2)).toFixed(1);
+  let co
