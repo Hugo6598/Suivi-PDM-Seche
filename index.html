@@ -93,11 +93,12 @@ input, select, button {
     <option value="1.9">Très intense</option>
   </select><br>
 
-  <label>Objectif:</label><br>
-  <select id="objectif">
-    <option value="pdm">Prise de masse</option>
-    <option value="seche">Sèche</option>
-  </select><br>
+<label>Objectif:</label><br>
+<select id="objectif">
+  <option value="pdm">Prise de masse</option>
+  <option value="seche">Sèche</option>
+  <option value="maintient">Maintient</option>
+</select><br>
 
   <button onclick="calculer()">Calculer 🔥</button>
 
@@ -141,4 +142,81 @@ function calculer() {
 
   // IMC
   const imc = (poids / ((taille/100)**2)).toFixed(1);
-  let co
+  let couleurIMC = "black";
+  if(imc < 18.5) couleurIMC = "orange";
+  else if(imc < 25) couleurIMC = "green";
+  else if(imc < 30) couleurIMC = "orange";
+  else couleurIMC = "red";
+
+  // BMR (Mifflin-St Jeor)
+  let bmr;
+  if(sexe === "homme") {
+    bmr = 10*poids + 6.25*taille - 5*age + 5;
+  } else {
+    bmr = 10*poids + 6.25*taille - 5*age - 161;
+  }
+
+// Besoin calorique ajusté selon objectif
+let calories = bmr * activite;
+if(objectif === "pdm") calories += 300;
+if(objectif === "seche") calories -= 300;
+// maintient = pas de modification
+
+  // Macros (standard: P=2g/kg, L=1g/kg, reste en glucides)
+  const proteines = Math.round(poids*2);
+  const lipides = Math.round(poids*1);
+  const glucides = Math.round((calories - (proteines*4 + lipides*9))/4);
+
+  const date = new Date().toLocaleDateString();
+  const entry = {date, poids, imc, calories, proteines, glucides, lipides};
+
+  // Stocker dans localStorage
+  let history = JSON.parse(localStorage.getItem('history')) || [];
+  history.push(entry);
+  localStorage.setItem('history', JSON.stringify(history));
+
+  afficherResult(entry);
+  afficherHistorique();
+}
+
+function afficherResult(entry) {
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    IMC: <span style="color:${entry.imc<18.5 || entry.imc>=30?'red':'green'}">${entry.imc}</span><br>
+    Calories/jour: ${Math.round(entry.calories)} kcal<br>
+    Protéines: ${entry.proteines}g | Glucides: ${entry.glucides}g | Lipides: ${entry.lipides}g
+  `;
+}
+
+function afficherHistorique() {
+  const tbody = document.getElementById('historyBody');
+  tbody.innerHTML = '';
+  const history = JSON.parse(localStorage.getItem('history')) || [];
+  history.forEach(entry => {
+    tbody.innerHTML += `<tr>
+      <td>${entry.date}</td>
+      <td>${entry.poids}</td>
+      <td>${entry.imc}</td>
+      <td>${Math.round(entry.calories)}</td>
+      <td>${entry.proteines}</td>
+      <td>${entry.glucides}</td>
+      <td>${entry.lipides}</td>
+    </tr>`;
+  });
+}
+
+// Réinitialiser
+function resetData() {
+  if(confirm("Supprimer tout l'historique ?")) {
+    localStorage.removeItem('history');
+    afficherHistorique();
+    document.getElementById('result').innerHTML = '';
+  }
+}
+
+// Afficher historique au chargement
+afficherHistorique();
+</script>
+
+</body>
+</html>
