@@ -5,6 +5,10 @@
 <title>Calculateur Nutrition Sportif</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     padding: 0;
@@ -12,10 +16,11 @@
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #fff;
     text-align: center;
+    min-height: 100vh;
   }
 
   h1 {
-    font-size: 48px;
+    font-size: clamp(32px, 6vw, 48px);
     margin-top: 30px;
     color: #00ffcc;
     text-shadow: 2px 2px #000;
@@ -38,29 +43,87 @@
     box-shadow: 0 0 20px #00ffcc;
   }
 
+  .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
   label {
-    display: block;
-    margin: 12px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
     font-size: 18px;
+    font-weight: bold;
+  }
+
+  .tooltip {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #00ffcc;
+    color: #000;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    cursor: help;
+    position: relative;
+  }
+
+  .tooltip:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 30px;
+    top: -10px;
+    background: rgba(0,0,0,0.95);
+    color: #00ffcc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 0 12px rgba(0,255,204,0.5);
   }
 
   input[type="number"], select {
-    width: 80%;
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     font-size: 18px;
     border-radius: 8px;
-    border: none;
-    margin-bottom: 12px;
+    border: 2px solid rgba(0,255,204,0.3);
+    background: rgba(255,255,255,0.9);
     text-align: center;
+    transition: border 0.3s;
+  }
+
+  input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: #00ffcc;
+    box-shadow: 0 0 8px rgba(0,255,204,0.5);
+  }
+
+  .error-msg {
+    color: #ff4500;
+    font-size: 14px;
+    margin-top: 4px;
+    font-family: Arial, sans-serif;
+    font-weight: normal;
   }
 
   .controls {
-    margin-top: 12px;
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
   }
 
   .button {
-    display: inline-block;
-    margin: 8px;
+    flex: 1;
+    min-width: 140px;
     padding: 14px 22px;
     font-size: 16px;
     font-weight: bold;
@@ -74,7 +137,32 @@
     transition: 0.15s all;
   }
 
-  .button:hover { transform: scale(1.05); box-shadow: 0 0 22px #ffae42; }
+  .button:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 22px #ffae42; 
+  }
+
+  .button:active {
+    transform: scale(0.98);
+  }
+
+  .link-secondary {
+    display: block;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: transparent;
+    color: #00ffcc;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+
+  .link-secondary:hover {
+    background: rgba(0,255,204,0.1);
+    transform: translateY(-2px);
+  }
 
   .result {
     margin-top: 20px;
@@ -83,31 +171,44 @@
     background: rgba(255,255,255,0.06);
     box-shadow: 0 0 12px #00ffcc;
     font-size: 18px;
-    line-height: 1.5;
+    line-height: 1.8;
+    text-align: left;
   }
 
-  .result h2 { color: #ffae42; margin-bottom: 10px; }
+  .result h2 { 
+    color: #ffae42; 
+    margin-bottom: 10px;
+    text-align: center;
+  }
 
   .seche { border-left: 8px solid #ff0000; }
   .maintien { border-left: 8px solid #00ff00; }
   .pdm { border-left: 8px solid #ffd700; }
 
-  .link-secondary {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 10px 16px;
-    background: transparent;
-    color: #00ffcc;
-    border: 1px solid rgba(0,255,204,0.15);
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
+  .meta {
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    line-height: 1.5;
   }
 
-  .meta {
-    margin-top: 8px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.8);
+  .chart-container {
+    margin-top: 24px;
+    padding: 20px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+  }
+
+  .chart-container h3 {
+    color: #00ffcc;
+    margin-bottom: 16px;
+  }
+
+  canvas {
+    max-width: 100%;
+    height: auto !important;
   }
 
   table {
@@ -117,16 +218,62 @@
     background: rgba(0,0,0,0.3);
     border-radius: 8px;
     overflow: hidden;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   table th, table td {
-    padding: 10px;
+    padding: 10px 8px;
     border: 1px solid rgba(255,255,255,0.2);
     text-align: center;
   }
 
-  table th { background: rgba(255,255,255,0.1); }
+  table th { 
+    background: rgba(255,255,255,0.1);
+    font-weight: bold;
+  }
+
+  .history-controls {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-small:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 600px) {
+    .button {
+      min-width: 100%;
+    }
+    
+    .tooltip:hover::after {
+      left: -80px;
+      top: 30px;
+      white-space: normal;
+      max-width: 200px;
+    }
+
+    table {
+      font-size: 12px;
+    }
+
+    table th, table td {
+      padding: 6px 4px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -134,103 +281,359 @@
 <h1>💪 Calculateur Nutrition Sportif</h1>
 
 <div class="form-container">
-  <label for="sexe">Sexe</label>
-  <select id="sexe">
-    <option value="homme">Homme</option>
-    <option value="femme">Femme</option>
-  </select>
+  <div class="input-group">
+    <label for="sexe">Sexe</label>
+    <select id="sexe">
+      <option value="homme">Homme</option>
+      <option value="femme">Femme</option>
+    </select>
+  </div>
 
-  <label for="age">Âge</label>
-  <input type="number" id="age" min="15" max="80" value="25">
+  <div class="input-group">
+    <label for="age">
+      Âge
+      <span class="tooltip" data-tip="Entre 15 et 80 ans">?</span>
+    </label>
+    <input type="number" id="age" min="15" max="80" value="25">
+    <div id="error-age" class="error-msg"></div>
+  </div>
 
-  <label for="poids">Poids (kg)</label>
-  <input type="number" id="poids" min="30" max="200" value="80">
+  <div class="input-group">
+    <label for="poids">
+      Poids (kg)
+      <span class="tooltip" data-tip="Votre poids actuel en kilogrammes">?</span>
+    </label>
+    <input type="number" id="poids" min="30" max="200" value="80" step="0.1">
+    <div id="error-poids" class="error-msg"></div>
+  </div>
 
-  <label for="taille">Taille (cm)</label>
-  <input type="number" id="taille" min="120" max="250" value="180">
+  <div class="input-group">
+    <label for="taille">
+      Taille (cm)
+      <span class="tooltip" data-tip="Votre taille en centimètres">?</span>
+    </label>
+    <input type="number" id="taille" min="120" max="250" value="180">
+    <div id="error-taille" class="error-msg"></div>
+  </div>
 
-  <label for="activite">Niveau d'activité (PAL)</label>
-  <select id="activite">
-    <option value="1.2">Sédentaire</option>
-    <option value="1.375">Légère</option>
-    <option value="1.55">Modérée</option>
-    <option value="1.725">Intense</option>
-    <option value="1.9">Très intense</option>
-  </select>
+  <div class="input-group">
+    <label for="activite">
+      Niveau d'activité (PAL)
+      <span class="tooltip" data-tip="PAL = Niveau d'Activité Physique. Sédentaire : bureau, peu de sport. Modéré : 3-4 séances/semaine. Intense : 5-6 séances/semaine">?</span>
+    </label>
+    <select id="activite">
+      <option value="1.2">Sédentaire (peu ou pas d'exercice)</option>
+      <option value="1.375">Légère (1-3 jours/semaine)</option>
+      <option value="1.55">Modérée (3-5 jours/semaine)</option>
+      <option value="1.725">Intense (6-7 jours/semaine)</option>
+      <option value="1.9">Très intense (2x par jour)</option>
+    </select>
+  </div>
 
   <div class="controls">
     <button class="button" onclick="calcul('seche')">Sèche</button>
     <button class="button" onclick="calcul('maintien')">Maintien</button>
     <button class="button" onclick="calcul('pdm')">Prise de masse</button>
-    <a class="link-secondary" href="interpretation.html">→ Interprétation & équivalences (page 2)</a>
   </div>
 
-  <div id="resultats" class="result"></div>
-  <div class="meta">Calcul basé sur Mifflin-St Jeor + PAL. Ratios de macros fournis en % (protéines / glucides / lipides).</div>
+  <a class="link-secondary" href="interpretation.html">→ Interprétation & équivalences </a>
 
-  <!-- --- Tableau historique --- -->
+  <div id="resultats" class="result" style="display:none;"></div>
+  
+  <div class="meta">
+    Calcul basé sur Mifflin-St Jeor + PAL (Niveau d'Activité Physique). Ratios de macros fournis en % (protéines / glucides / lipides).
+  </div>
+
+  <div class="chart-container" id="chart-section" style="display:none;">
+    <h3>📈 Évolution du poids</h3>
+    <canvas id="weightChart"></canvas>
+  </div>
+
   <table id="historique">
     <thead>
       <tr>
         <th>Date</th>
         <th>Poids (kg)</th>
-        <th>Calories totales (kcal)</th>
+        <th>Calories (kcal)</th>
         <th>Objectif</th>
       </tr>
     </thead>
     <tbody>
-      <!-- Les lignes seront ajoutées dynamiquement -->
     </tbody>
   </table>
+
+  <div class="history-controls">
+    <button class="btn-small" onclick="effacerHistorique()">🗑️ Effacer l'historique</button>
+    <button class="btn-small" onclick="exporterHistorique()">📥 Exporter CSV</button>
+  </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <script>
-function calcul(objectif) {
+let chartInstance = null;
+
+// Charger l'historique au démarrage
+window.addEventListener('DOMContentLoaded', async () => {
+  await chargerHistorique();
+});
+
+// Validation des champs
+function validerChamps() {
+  let valide = true;
+  
+  const age = parseInt(document.getElementById('age').value);
+  const poids = parseFloat(document.getElementById('poids').value);
+  const taille = parseFloat(document.getElementById('taille').value);
+  
+  // Reset messages d'erreur
+  document.getElementById('error-age').textContent = '';
+  document.getElementById('error-poids').textContent = '';
+  document.getElementById('error-taille').textContent = '';
+  
+  if (!age || age < 15 || age > 80) {
+    document.getElementById('error-age').textContent = '⚠️ L\'âge doit être entre 15 et 80 ans';
+    valide = false;
+  }
+  
+  if (!poids || poids < 30 || poids > 200) {
+    document.getElementById('error-poids').textContent = '⚠️ Le poids doit être entre 30 et 200 kg';
+    valide = false;
+  }
+  
+  if (!taille || taille < 120 || taille > 250) {
+    document.getElementById('error-taille').textContent = '⚠️ La taille doit être entre 120 et 250 cm';
+    valide = false;
+  }
+  
+  return valide;
+}
+
+async function calcul(objectif) {
+  if (!validerChamps()) {
+    return;
+  }
+
   const sexe = document.getElementById('sexe').value;
-  const age = parseInt(document.getElementById('age').value) || 25;
-  const poids = parseFloat(document.getElementById('poids').value) || 80;
-  const taille = parseFloat(document.getElementById('taille').value) || 180;
-  const activite = parseFloat(document.getElementById('activite').value) || 1.55;
+  const age = parseInt(document.getElementById('age').value);
+  const poids = parseFloat(document.getElementById('poids').value);
+  const taille = parseFloat(document.getElementById('taille').value);
+  const activite = parseFloat(document.getElementById('activite').value);
 
   // BMR Mifflin-St Jeor
   let bmr;
-  if (sexe === 'homme') bmr = 10 * poids + 6.25 * taille - 5 * age + 5;
-  else bmr = 10 * poids + 6.25 * taille - 5 * age - 161;
+  if (sexe === 'homme') {
+    bmr = 10 * poids + 6.25 * taille - 5 * age + 5;
+  } else {
+    bmr = 10 * poids + 6.25 * taille - 5 * age - 161;
+  }
 
   // Total calories
   let calTot = Math.round(bmr * activite);
 
   // Ajustement selon objectif
-  if (objectif === 'seche') calTot = Math.round(calTot - 300);
-  else if (objectif === 'pdm') calTot = Math.round(calTot + 400);
+  if (objectif === 'seche') {
+    calTot = Math.round(calTot - 300);
+  } else if (objectif === 'pdm') {
+    calTot = Math.round(calTot + 400);
+  }
 
   // Ratios en %
   const configs = {
-    seche: { pctProt: 35, pctGlu: 35, pctLip: 30 },
-    maintien: { pctProt: 25, pctGlu: 50, pctLip: 25 },
-    pdm: { pctProt: 25, pctGlu: 55, pctLip: 20 }
+    seche: { pctProt: 35, pctGlu: 35, pctLip: 30, nom: 'SÈCHE' },
+    maintien: { pctProt: 25, pctGlu: 50, pctLip: 25, nom: 'MAINTIEN' },
+    pdm: { pctProt: 25, pctGlu: 55, pctLip: 20, nom: 'PRISE DE MASSE' }
   };
   const conf = configs[objectif];
 
+  // Calcul en grammes
+  const protGrammes = Math.round((calTot * conf.pctProt / 100) / 4);
+  const gluGrammes = Math.round((calTot * conf.pctGlu / 100) / 4);
+  const lipGrammes = Math.round((calTot * conf.pctLip / 100) / 9);
+
   // Affichage
   const resultDiv = document.getElementById('resultats');
+  resultDiv.style.display = 'block';
   resultDiv.className = 'result ' + objectif;
   resultDiv.innerHTML = `
-    <h2>${objectif.toUpperCase()}</h2>
-    <strong>Calories totales :</strong> ${calTot} kcal<br>
-    <strong>Répartition (en %)</strong><br>
-    Protéines : ${conf.pctProt}%<br>
-    Glucides : ${conf.pctGlu}%<br>
-    Lipides : ${conf.pctLip}%<br><br>
-    <em>Utilise le lien "Interprétation & équivalences" pour traduire ces calories en portions standards.</em>
+    <h2>${conf.nom}</h2>
+    <strong>🔥 Calories totales :</strong> ${calTot} kcal<br><br>
+    <strong>📊 Répartition (en %)</strong><br>
+    🥩 Protéines : ${conf.pctProt}% (${protGrammes}g)<br>
+    🍞 Glucides : ${conf.pctGlu}% (${gluGrammes}g)<br>
+    🥑 Lipides : ${conf.pctLip}% (${lipGrammes}g)<br><br>
+    <em>💡 Utilise le lien "Interprétation & équivalences" pour traduire ces calories en portions standards.</em>
   `;
 
-  // Ajouter ligne historique
-  const tbody = document.getElementById('historique').querySelector('tbody');
-  const date = new Date().toLocaleDateString();
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${date}</td><td>${poids}</td><td>${calTot}</td><td>${objectif}</td>`;
-  tbody.appendChild(tr);
+  // Sauvegarder dans l'historique
+  await ajouterHistorique(poids, calTot, objectif);
+}
+
+async function ajouterHistorique(poids, calories, objectif) {
+  try {
+    const date = new Date().toLocaleString('fr-FR', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    // Récupérer l'historique existant
+    let historique = [];
+    try {
+      const result = await window.storage.get('nutrition-historique');
+      if (result && result.value) {
+        historique = JSON.parse(result.value);
+      }
+    } catch (e) {
+      // Pas d'historique existant
+    }
+    
+    // Ajouter la nouvelle entrée
+    historique.push({ date, poids, calories, objectif });
+    
+    // Limiter à 50 entrées
+    if (historique.length > 50) {
+      historique = historique.slice(-50);
+    }
+    
+    // Sauvegarder
+    await window.storage.set('nutrition-historique', JSON.stringify(historique));
+    
+    // Rafraîchir l'affichage
+    await chargerHistorique();
+  } catch (error) {
+    console.error('Erreur sauvegarde:', error);
+  }
+}
+
+async function chargerHistorique() {
+  try {
+    const result = await window.storage.get('nutrition-historique');
+    if (!result || !result.value) {
+      return;
+    }
+    
+    const historique = JSON.parse(result.value);
+    const tbody = document.getElementById('historique').querySelector('tbody');
+    tbody.innerHTML = '';
+    
+    // Afficher les dernières entrées en premier
+    historique.reverse().forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${entry.date}</td>
+        <td>${entry.poids}</td>
+        <td>${entry.calories}</td>
+        <td>${entry.objectif}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    
+    // Mettre à jour le graphique
+    if (historique.length > 0) {
+      mettreAJourGraphique(historique.reverse());
+    }
+  } catch (error) {
+    console.error('Erreur chargement:', error);
+  }
+}
+
+function mettreAJourGraphique(historique) {
+  const chartSection = document.getElementById('chart-section');
+  chartSection.style.display = 'block';
+  
+  const ctx = document.getElementById('weightChart').getContext('2d');
+  
+  // Détruire l'ancien graphique s'il existe
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+  
+  // Prendre les 15 dernières entrées maximum pour le graphique
+  const data = historique.slice(-15);
+  
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.date.split(' ')[0]),
+      datasets: [{
+        label: 'Poids (kg)',
+        data: data.map(d => d.poids),
+        borderColor: '#00ffcc',
+        backgroundColor: 'rgba(0,255,204,0.1)',
+        tension: 0.3,
+        fill: true,
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#fff',
+            font: { size: 14 }
+          }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        x: {
+          ticks: { color: '#fff' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      }
+    }
+  });
+}
+
+async function effacerHistorique() {
+  if (confirm('Êtes-vous sûr de vouloir effacer tout l\'historique ?')) {
+    try {
+      await window.storage.delete('nutrition-historique');
+      document.getElementById('historique').querySelector('tbody').innerHTML = '';
+      document.getElementById('chart-section').style.display = 'none';
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+      }
+      alert('✅ Historique effacé !');
+    } catch (error) {
+      alert('❌ Erreur lors de l\'effacement');
+    }
+  }
+}
+
+async function exporterHistorique() {
+  try {
+    const result = await window.storage.get('nutrition-historique');
+    if (!result || !result.value) {
+      alert('Aucun historique à exporter');
+      return;
+    }
+    
+    const historique = JSON.parse(result.value);
+    let csv = 'Date,Poids (kg),Calories (kcal),Objectif\n';
+    historique.forEach(entry => {
+      csv += `${entry.date},${entry.poids},${entry.calories},${entry.objectif}\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'historique_nutrition.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    alert('❌ Erreur lors de l\'export');
+  }
 }
 </script>
 
