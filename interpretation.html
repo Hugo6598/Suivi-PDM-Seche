@@ -288,11 +288,114 @@
     .summary-cards {
       grid-template-columns: 1fr 1fr;
     }
+
+    /* Menu latéral */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.95);
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+  box-shadow: 2px 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.sidebar a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #00ffcc;
+  display: block;
+  transition: 0.3s;
+  border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+}
+
+.sidebar a:hover {
+  background: rgba(0, 255, 204, 0.1);
+  color: #fff;
+  padding-left: 35px;
+}
+
+.sidebar .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  background: none;
+  border: none;
+  color: #00ffcc;
+  cursor: pointer;
+}
+
+.menu-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  background: rgba(0, 255, 204, 0.2);
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #00ffcc;
+  z-index: 999;
+  transition: all 0.3s;
+}
+
+.menu-btn:hover {
+  background: rgba(0, 255, 204, 0.3);
+  transform: scale(1.1);
+}
+
+.main-content {
+  transition: margin-left 0.3s;
+}
+
+@media (max-width: 600px) {
+  .sidebar.open {
+    width: 250px;
+  }
+  .menu-btn {
+    top: 10px;
+    left: 10px;
+  }
+}
+
+@media (min-width: 601px) {
+  .sidebar.open {
+    width: 300px;
+  }
+}
   }
 </style>
 </head>
 <body>
 
+  <!-- Menu latéral -->
+<div id="sidebar" class="sidebar">
+  <button class="close-btn" onclick="closeNav()">&times;</button>
+  <a href="index.html">🏠 Accueil Calculateur</a>
+  <a href="interpretation.html">🍽 Équivalences Alimentaires</a>
+  <a href="entrainement.html" style="color: #ffae42;">💪 Programmes d'Entraînement</a>
+  <a href="recettes.html">👨‍🍳 Recettes Sportives</a>
+  <a href="progression.html">📈 Suivi Progression</a>
+  <a href="parametres.html">⚙️ Paramètres</a>
+  <div style="margin-top: 30px; padding: 15px; border-top: 1px solid rgba(0,255,204,0.3);">
+    <small style="color: rgba(255,255,255,0.5);">V1.0 - Nutrition Sportif</small>
+  </div>
+</div>
+
+<!-- Bouton menu -->
+<div class="menu-btn" onclick="openNav()">☰</div>
+
+<div class="main-content">
+  <!-- Le contenu existant de ta page d'équivalences reste ici -->
+  
 <h1>🍽 Équivalences Alimentaires</h1>
 
 <div class="container">
@@ -532,6 +635,27 @@
 </div>
 
 <script>
+  // Fonctions pour le menu latéral
+function openNav() {
+  document.getElementById("sidebar").classList.add("open");
+  document.body.style.marginLeft = "300px";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").classList.remove("open");
+  document.body.style.marginLeft = "0";
+}
+
+// Fermer le menu en cliquant à l'extérieur
+document.addEventListener('click', function(event) {
+  const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.querySelector('.menu-btn');
+  
+  if (!sidebar.contains(event.target) && !menuBtn.contains(event.target) && sidebar.classList.contains('open')) {
+    closeNav();
+  }
+});
+  
 // Base de données alimentaire (valeurs pour 100g)
 const foodDatabase = {
   "Produits laitiers": [
