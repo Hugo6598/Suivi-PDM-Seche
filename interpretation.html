@@ -732,13 +732,11 @@ document.querySelectorAll(".accordion-header").forEach(header => {
   header.addEventListener("click", () => {
     header.classList.toggle("active");
     const panel = header.nextElementSibling;
-    if (panel.style.display === "block") {
-      panel.style.display = "none";
-    } else {
-      panel.style.display = "block";
-    }
+    // Si le panel est déjà visible, on le cache, sinon on l'affiche
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
   });
 });
+
 
 // -----------------------------
 // GÉNÉRATION DES TABLEAUX
