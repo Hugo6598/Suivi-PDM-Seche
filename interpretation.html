@@ -5,7 +5,6 @@
 <title>Équivalences Alimentaires</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  /* Votre CSS reste inchangé */
   * {
     box-sizing: border-box;
   }
@@ -19,6 +18,90 @@
     text-align: center;
     min-height: 100vh;
     padding-bottom: 40px;
+    transition: margin-left 0.3s;
+  }
+
+  /* Menu latéral */
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.95);
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    box-shadow: 2px 0 10px rgba(0, 255, 204, 0.3);
+  }
+
+  .sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #00ffcc;
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+  }
+
+  .sidebar a:hover {
+    background: rgba(0, 255, 204, 0.1);
+    color: #fff;
+    padding-left: 35px;
+  }
+
+  .sidebar .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    background: none;
+    border: none;
+    color: #00ffcc;
+    cursor: pointer;
+  }
+
+  .menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    background: rgba(0, 255, 204, 0.2);
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #00ffcc;
+    z-index: 999;
+    transition: all 0.3s;
+  }
+
+  .menu-btn:hover {
+    background: rgba(0, 255, 204, 0.3);
+    transform: scale(1.1);
+  }
+
+  .main-content {
+    transition: margin-left 0.3s;
+  }
+
+  @media (max-width: 600px) {
+    .sidebar.open {
+      width: 250px;
+    }
+    .menu-btn {
+      top: 10px;
+      left: 10px;
+    }
+  }
+
+  @media (min-width: 601px) {
+    .sidebar.open {
+      width: 300px;
+    }
   }
 
   h1 {
@@ -288,95 +371,12 @@
     .summary-cards {
       grid-template-columns: 1fr 1fr;
     }
-
-    /* Menu latéral */
-.sidebar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.95);
-  overflow-x: hidden;
-  transition: 0.3s;
-  padding-top: 60px;
-  box-shadow: 2px 0 10px rgba(0, 255, 204, 0.3);
-}
-
-.sidebar a {
-  padding: 15px 25px;
-  text-decoration: none;
-  font-size: 18px;
-  color: #00ffcc;
-  display: block;
-  transition: 0.3s;
-  border-bottom: 1px solid rgba(0, 255, 204, 0.1);
-}
-
-.sidebar a:hover {
-  background: rgba(0, 255, 204, 0.1);
-  color: #fff;
-  padding-left: 35px;
-}
-
-.sidebar .close-btn {
-  position: absolute;
-  top: 20px;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-  background: none;
-  border: none;
-  color: #00ffcc;
-  cursor: pointer;
-}
-
-.menu-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 30px;
-  cursor: pointer;
-  background: rgba(0, 255, 204, 0.2);
-  border: 2px solid #00ffcc;
-  border-radius: 8px;
-  padding: 8px 12px;
-  color: #00ffcc;
-  z-index: 999;
-  transition: all 0.3s;
-}
-
-.menu-btn:hover {
-  background: rgba(0, 255, 204, 0.3);
-  transform: scale(1.1);
-}
-
-.main-content {
-  transition: margin-left 0.3s;
-}
-
-@media (max-width: 600px) {
-  .sidebar.open {
-    width: 250px;
-  }
-  .menu-btn {
-    top: 10px;
-    left: 10px;
-  }
-}
-
-@media (min-width: 601px) {
-  .sidebar.open {
-    width: 300px;
-  }
-}
   }
 </style>
 </head>
 <body>
 
-  <!-- Menu latéral -->
+<!-- Menu latéral -->
 <div id="sidebar" class="sidebar">
   <button class="close-btn" onclick="closeNav()">&times;</button>
   <a href="index.html">🏠 Accueil Calculateur</a>
@@ -394,248 +394,247 @@
 <div class="menu-btn" onclick="openNav()">☰</div>
 
 <div class="main-content">
-  <!-- Le contenu existant de ta page d'équivalences reste ici -->
-  
-<h1>🍽 Équivalences Alimentaires</h1>
+  <h1>🍽 Équivalences Alimentaires</h1>
 
-<div class="container">
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Rechercher un aliment (ex: poulet, riz, amandes...)">
-    <span class="search-icon">🔍</span>
-  </div>
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher un aliment (ex: poulet, riz, amandes...)">
+      <span class="search-icon">🔍</span>
+    </div>
 
-  <div class="summary-cards">
-    <div class="summary-card">
-      <h3>🔥 CALORIES TOTALES</h3>
-      <div><span class="value" id="total-cal">0</span> <span class="unit">kcal</span></div>
+    <div class="summary-cards">
+      <div class="summary-card">
+        <h3>🔥 CALORIES TOTALES</h3>
+        <div><span class="value" id="total-cal">0</span> <span class="unit">kcal</span></div>
+      </div>
+      <div class="summary-card">
+        <h3>🥩 PROTÉINES</h3>
+        <div><span class="value" id="total-prot">0</span> <span class="unit">g</span></div>
+      </div>
+      <div class="summary-card">
+        <h3>🍞 GLUCIDES</h3>
+        <div><span class="value" id="total-carbs">0</span> <span class="unit">g</span></div>
+      </div>
+      <div class="summary-card">
+        <h3>🥑 LIPIDES</h3>
+        <div><span class="value" id="total-fats">0</span> <span class="unit">g</span></div>
+      </div>
     </div>
-    <div class="summary-card">
-      <h3>🥩 PROTÉINES</h3>
-      <div><span class="value" id="total-prot">0</span> <span class="unit">g</span></div>
-    </div>
-    <div class="summary-card">
-      <h3>🍞 GLUCIDES</h3>
-      <div><span class="value" id="total-carbs">0</span> <span class="unit">g</span></div>
-    </div>
-    <div class="summary-card">
-      <h3>🥑 LIPIDES</h3>
-      <div><span class="value" id="total-fats">0</span> <span class="unit">g</span></div>
-    </div>
-  </div>
 
-  <!-- Produits laitiers -->
-  <div class="accordion" data-category="Produits laitiers">
-    <button class="accordion-header">
-      <span>🥛 Produits laitiers</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Produits laitiers -->
+    <div class="accordion" data-category="Produits laitiers">
+      <button class="accordion-header">
+        <span>🥛 Produits laitiers</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Viande, poisson, œufs -->
-  <div class="accordion" data-category="Viande, poisson, œufs">
-    <button class="accordion-header">
-      <span>🍗 Viande, poisson, œufs</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Viande, poisson, œufs -->
+    <div class="accordion" data-category="Viande, poisson, œufs">
+      <button class="accordion-header">
+        <span>🍗 Viande, poisson, œufs</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Céréales et féculents -->
-  <div class="accordion" data-category="Céréales et féculents">
-    <button class="accordion-header">
-      <span>🍚 Céréales et féculents</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Céréales et féculents -->
+    <div class="accordion" data-category="Céréales et féculents">
+      <button class="accordion-header">
+        <span>🍚 Céréales et féculents</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Fruits et légumes -->
-  <div class="accordion" data-category="Fruits et légumes">
-    <button class="accordion-header">
-      <span>🥗 Fruits et légumes</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Fruits et légumes -->
+    <div class="accordion" data-category="Fruits et légumes">
+      <button class="accordion-header">
+        <span>🥗 Fruits et légumes</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Oléagineux et matières grasses -->
-  <div class="accordion" data-category="Oléagineux et matières grasses">
-    <button class="accordion-header">
-      <span>🥜 Oléagineux et matières grasses</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Oléagineux et matières grasses -->
+    <div class="accordion" data-category="Oléagineux et matières grasses">
+      <button class="accordion-header">
+        <span>🥜 Oléagineux et matières grasses</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Suppléments et protéines -->
-  <div class="accordion" data-category="Suppléments et protéines">
-    <button class="accordion-header">
-      <span>💪 Suppléments et protéines</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Suppléments et protéines -->
+    <div class="accordion" data-category="Suppléments et protéines">
+      <button class="accordion-header">
+        <span>💪 Suppléments et protéines</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Fast-food et plats préparés -->
-  <div class="accordion" data-category="Fast-food et plats préparés">
-    <button class="accordion-header">
-      <span>🍔 Fast-food et plats préparés</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Fast-food et plats préparés -->
+    <div class="accordion" data-category="Fast-food et plats préparés">
+      <button class="accordion-header">
+        <span>🍔 Fast-food et plats préparés</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Autres aliments et boissons -->
-  <div class="accordion" data-category="Autres aliments et boissons">
-    <button class="accordion-header">
-      <span>🍰 Autres aliments et boissons</span>
-      <span class="accordion-icon">▼</span>
-    </button>
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Aliment</th>
-            <th>Portion</th>
-            <th>Cal (kcal)</th>
-            <th>Prot (g)</th>
-            <th>Gluc (g)</th>
-            <th>Lip (g)</th>
-            <th>Quantité</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Autres aliments et boissons -->
+    <div class="accordion" data-category="Autres aliments et boissons">
+      <button class="accordion-header">
+        <span>🍰 Autres aliments et boissons</span>
+        <span class="accordion-icon">▼</span>
+      </button>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Aliment</th>
+              <th>Portion</th>
+              <th>Cal (kcal)</th>
+              <th>Prot (g)</th>
+              <th>Gluc (g)</th>
+              <th>Lip (g)</th>
+              <th>Quantité</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <div class="controls">
-    <button class="button secondary" onclick="resetAll()">🗑️ Tout réinitialiser</button>
-    <button class="button secondary" onclick="saveToHistory()">💾 Sauvegarder journée</button>
-    <a class="button" href="index.html">← Retour calculateur</a>
-  </div>
+    <div class="controls">
+      <button class="button secondary" onclick="resetAll()">🗑️ Tout réinitialiser</button>
+      <button class="button secondary" onclick="saveToHistory()">💾 Sauvegarder journée</button>
+      <a class="button" href="index.html">← Retour calculateur</a>
+    </div>
 
-  <div class="meta">
-    💡 Toutes les valeurs nutritionnelles sont basées sur des données pour 100g. Ajuste les quantités selon tes besoins.
+    <div class="meta">
+      💡 Toutes les valeurs nutritionnelles sont basées sur des données pour 100g. Ajuste les quantités selon tes besoins.
+    </div>
   </div>
 </div>
 
 <script>
-  // Fonctions pour le menu latéral
+// Fonctions pour le menu latéral
 function openNav() {
   document.getElementById("sidebar").classList.add("open");
   document.body.style.marginLeft = "300px";
@@ -655,7 +654,7 @@ document.addEventListener('click', function(event) {
     closeNav();
   }
 });
-  
+
 // Base de données alimentaire (valeurs pour 100g)
 const foodDatabase = {
   "Produits laitiers": [
