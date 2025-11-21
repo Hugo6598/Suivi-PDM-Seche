@@ -5,223 +5,609 @@
 <title>Équivalences Alimentaires</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial Black', sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  text-align: center;
-}
-h1 {
-  font-size: 48px;
-  margin-top: 30px;
-  color: #00ffcc;
-  text-shadow: 2px 2px #000;
-  animation: pulse 2s infinite alternate;
-}
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-.accordion {
-  width: 95%;
-  max-width: 900px;
-  margin: 20px auto;
-  background: rgba(0,0,0,0.6);
-  border-radius: 12px;
-  box-shadow: 0 0 20px #00ffcc;
-  overflow: hidden;
-}
-.accordion button {
-  background: rgba(0,0,0,0.4);
-  color: #00ffcc;
-  cursor: pointer;
-  padding: 14px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 18px;
-  font-weight: bold;
-  transition: 0.2s;
-}
-.accordion button:hover {
-  background: rgba(0,255,204,0.2);
-}
-.accordion button.active {
-  background: rgba(0,255,204,0.3);
-}
-.panel {
-  padding: 0 0;
-  display: none;
-  background-color: rgba(0,0,0,0.2);
-  overflow: hidden;
-}
-.panel table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0;
-}
-.panel th, .panel td {
-  padding: 10px;
-  border: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-  font-size: 16px;
-}
-.panel th {
-  background: rgba(255,255,255,0.1);
-}
-input[type="number"] {
-  width: 70px;
-  padding: 5px;
-  border-radius: 6px;
-  border: none;
-  text-align: center;
-}
-.total {
-  margin: 20px 0;
-  font-size: 18px;
-  font-weight: bold;
-}
-.link-primary {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  background: #ff4500;
-  color: #fff;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: bold;
-}
-.link-primary:hover {
-  background: #ffae42;
-  color: #000;
-}
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Black', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    text-align: center;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  h1 {
+    font-size: clamp(32px, 6vw, 48px);
+    margin-top: 30px;
+    color: #00ffcc;
+    text-shadow: 2px 2px #000;
+    animation: pulse 2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  .container {
+    width: 95%;
+    max-width: 1000px;
+    margin: 20px auto;
+  }
+
+  .search-bar {
+    margin: 20px auto;
+    max-width: 600px;
+    position: relative;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 14px 50px 14px 20px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 2px solid rgba(0,255,204,0.3);
+    background: rgba(255,255,255,0.95);
+    transition: all 0.3s;
+  }
+
+  .search-bar input:focus {
+    outline: none;
+    border-color: #00ffcc;
+    box-shadow: 0 0 12px rgba(0,255,204,0.5);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #666;
+  }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .summary-card {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,255,204,0.3);
+    border-left: 4px solid #00ffcc;
+  }
+
+  .summary-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #00ffcc;
+    font-weight: normal;
+  }
+
+  .summary-card .value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .summary-card .unit {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .accordion {
+    background: rgba(0,0,0,0.6);
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00ffcc;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .accordion-header {
+    background: rgba(0,0,0,0.4);
+    color: #00ffcc;
+    cursor: pointer;
+    padding: 16px 20px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .accordion-header:hover {
+    background: rgba(0,255,204,0.2);
+  }
+
+  .accordion-header.active {
+    background: rgba(0,255,204,0.3);
+  }
+
+  .accordion-icon {
+    transition: transform 0.3s;
+    font-size: 20px;
+  }
+
+  .accordion-header.active .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .panel {
+    display: none;
+    background-color: rgba(0,0,0,0.2);
+    overflow-x: auto;
+  }
+
+  .panel.show {
+    display: block;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+
+  th, td {
+    padding: 12px 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    font-size: 14px;
+  }
+
+  th {
+    background: rgba(255,255,255,0.1);
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+  }
+
+  tr:hover {
+    background: rgba(255,255,255,0.05);
+  }
+
+  .food-name {
+    text-align: left;
+    font-weight: 500;
+  }
+
+  input[type="number"] {
+    width: 80px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 2px solid rgba(0,255,204,0.3);
+    text-align: center;
+    font-size: 14px;
+    background: rgba(255,255,255,0.95);
+    transition: border 0.3s;
+  }
+
+  input[type="number"]:focus {
+    outline: none;
+    border-color: #00ffcc;
+  }
+
+  .btn-clear {
+    padding: 6px 12px;
+    background: rgba(255,69,0,0.2);
+    border: 1px solid #ff4500;
+    color: #ff4500;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+
+  .btn-clear:hover {
+    background: rgba(255,69,0,0.4);
+  }
+
+  .controls {
+    margin: 24px 0;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: #ff4500;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 0 12px #ff4500;
+    transition: 0.15s all;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 22px #ffae42;
+  }
+
+  .button.secondary {
+    background: transparent;
+    border: 2px solid #00ffcc;
+    color: #00ffcc;
+    box-shadow: none;
+  }
+
+  .button.secondary:hover {
+    background: rgba(0,255,204,0.1);
+  }
+
+  .no-results {
+    padding: 40px;
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+  }
+
+  .meta {
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    th, td {
+      padding: 8px 4px;
+      font-size: 12px;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      font-size: 12px;
+    }
+
+    .summary-cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
 </style>
 </head>
 <body>
 
 <h1>🍽 Équivalences Alimentaires</h1>
 
-<div class="accordion">
-  <button>Produits laitiers</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g/ml)</th></tr></thead>
-      <tbody>
-        <tr><td>Lait</td><td>150 ml</td><td>72</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Yaourt nature</td><td>125 g</td><td>70</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Fromage</td><td>30 g</td><td>105</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+<div class="container">
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Rechercher un aliment (ex: poulet, riz, amandes...)">
+    <span class="search-icon">🔍</span>
   </div>
 
-  <button>Viande, poisson, œufs</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g)</th></tr></thead>
-      <tbody>
-        <tr><td>Viande rouge</td><td>120 g</td><td>235</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Poulet</td><td>120 g</td><td>165</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Poisson</td><td>120 g</td><td>175</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Œufs</td><td>60 g</td><td>90</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Pâté</td><td>30 g</td><td>100</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+  <div class="summary-cards">
+    <div class="summary-card">
+      <h3>🔥 CALORIES TOTALES</h3>
+      <div><span class="value" id="total-cal">0</span> <span class="unit">kcal</span></div>
+    </div>
+    <div class="summary-card">
+      <h3>🥩 PROTÉINES</h3>
+      <div><span class="value" id="total-prot">0</span> <span class="unit">g</span></div>
+    </div>
+    <div class="summary-card">
+      <h3>🍞 GLUCIDES</h3>
+      <div><span class="value" id="total-carbs">0</span> <span class="unit">g</span></div>
+    </div>
+    <div class="summary-card">
+      <h3>🥑 LIPIDES</h3>
+      <div><span class="value" id="total-fats">0</span> <span class="unit">g</span></div>
+    </div>
   </div>
 
-   <button>Céréales et féculents</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g)</th></tr></thead>
-      <tbody>
-        <tr><td>Pain</td><td>60 g</td><td>165</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Pâtes crues</td><td>100 g</td><td>350</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Riz blanc cuit</td><td>150 g</td><td>215</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Lentilles / Pois chiches cuites</td><td>130 g</td><td>130</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Pomme de terre cuite</td><td>150 g</td><td>130</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+  <!-- Produits laitiers -->
+  <div class="accordion" data-category="Produits laitiers">
+    <button class="accordion-header">
+      <span>🥛 Produits laitiers</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-
-  <button>Fruits et légumes</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g/ml)</th></tr></thead>
-      <tbody>
-        <tr><td>Légumes</td><td>150 g</td><td>35</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Fruits</td><td>150 g</td><td>75</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Compote</td><td>100 g</td><td>105</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Jus d'orange</td><td>200 ml</td><td>85</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Bananes</td><td>1 unité</td><td>105</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+  <!-- Viande, poisson, œufs -->
+  <div class="accordion" data-category="Viande, poisson, œufs">
+    <button class="accordion-header">
+      <span>🍗 Viande, poisson, œufs</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-  <button>Oléagineux et matières grasses</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g/ml)</th></tr></thead>
-      <tbody>
-        <tr><td>Amandes</td><td>20 g</td><td>120</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Noix</td><td>20 g</td><td>140</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Avocat</td><td>80 g</td><td>120</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Huile (olive, coco, colza)</td><td>1 CS</td><td>90</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Beurre</td><td>10 g</td><td>75</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+  <!-- Céréales et féculents -->
+  <div class="accordion" data-category="Céréales et féculents">
+    <button class="accordion-header">
+      <span>🍚 Céréales et féculents</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-  <button>Autres aliments et boissons</button>
-  <div class="panel">
-    <table>
-      <thead><tr><th>Aliment</th><th>Portion</th><th>Calories</th><th>Quantité (g/ml)</th></tr></thead>
-      <tbody>
-        <tr><td>Chocolat noir 70%</td><td>10 g</td><td>55</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Glace</td><td>80 g</td><td>200</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Gâteau</td><td>50 g</td><td>205</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Sodas</td><td>200 ml</td><td>316</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Vin</td><td>150 ml</td><td>120</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-        <tr><td>Pizza</td><td>200 g</td><td>465</td><td><input type="number" value="0" oninput="updateTotal()"></td></tr>
-      </tbody>
-    </table>
+  <!-- Fruits et légumes -->
+  <div class="accordion" data-category="Fruits et légumes">
+    <button class="accordion-header">
+      <span>🥗 Fruits et légumes</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Oléagineux et matières grasses -->
+  <div class="accordion" data-category="Oléagineux et matières grasses">
+    <button class="accordion-header">
+      <span>🥜 Oléagineux et matières grasses</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Suppléments et protéines -->
+  <div class="accordion" data-category="Suppléments et protéines">
+    <button class="accordion-header">
+      <span>💪 Suppléments et protéines</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Fast-food et plats préparés -->
+  <div class="accordion" data-category="Fast-food et plats préparés">
+    <button class="accordion-header">
+      <span>🍔 Fast-food et plats préparés</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Autres aliments et boissons -->
+  <div class="accordion" data-category="Autres aliments et boissons">
+    <button class="accordion-header">
+      <span>🍰 Autres aliments et boissons</span>
+      <span class="accordion-icon">▼</span>
+    </button>
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Aliment</th>
+            <th>Portion</th>
+            <th>Cal (kcal)</th>
+            <th>Prot (g)</th>
+            <th>Gluc (g)</th>
+            <th>Lip (g)</th>
+            <th>Quantité</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="button secondary" onclick="resetAll()">🗑️ Tout réinitialiser</button>
+    <button class="button secondary" onclick="saveToHistory()">💾 Sauvegarder journée</button>
+    <a class="button" href="index.html">← Retour calculateur</a>
+  </div>
+
+  <div class="meta">
+    💡 Toutes les valeurs nutritionnelles sont basées sur des données pour 100g. Ajuste les quantités selon tes besoins.
   </div>
 </div>
-
-<div class="total">
-  Total calories sélectionnées : <span id="total-cal">0</span> kcal
-</div>
-
-<a class="link-primary" href="index.html">← Retour calculateur (page 1)</a>
 
 <script>
-// Accordion
-const acc = document.getElementsByClassName("accordion")[0].getElementsByTagName("button");
-for(let i=0; i<acc.length; i++){
-  acc[i].addEventListener("click", function(){
-    this.classList.toggle("active");
-    const panel = this.nextElementSibling;
-    panel.style.display = (panel.style.display === "block") ? "none" : "block";
-  });
-}
-
-// Calcul total calories
-function updateTotal(){
-  const inputs = document.querySelectorAll('input[type="number"]');
-  let total = 0;
-  inputs.forEach(input => {
-    const row = input.parentElement.parentElement;
-    const kcal = parseFloat(row.cells[2].innerText) || 0;
-    let portionText = row.cells[1].innerText; // ex: "150 g", "200 ml", "1 unité", "1 CS"
-    let portionQty = parseFloat(portionText.match(/\d+/)) || 1; // extrait le chiffre
-    total += kcal * (input.value / portionQty);
-  });
-  document.getElementById('total-cal').innerText = Math.round(total);
-}
-</script>
-
-</body>
-</html>
+// Base de données alimentaire (valeurs pour 100g)
+const foodDatabase = {
+  "Produits laitiers": [
+    { name: "Lait entier", portion: "250 ml", cal: 61, prot: 3.2, carbs: 4.8, fat: 3.3 },
+    { name: "Lait demi-écrémé", portion: "250 ml", cal: 46, prot: 3.3, carbs: 4.8, fat: 1.6 },
+    { name: "Lait écrémé", portion: "250 ml", cal: 34, prot: 3.4, carbs: 5.0, fat: 0.1 },
+    { name: "Yaourt nature 0%", portion: "125 g", cal: 44, prot: 4.5, carbs: 6.0, fat: 0.1 },
+    { name: "Yaourt nature 20%", portion: "125 g", cal: 70, prot: 4.0, carbs: 5.0, fat: 3.5 },
+    { name: "Yaourt grec 0%", portion: "150 g", cal: 59, prot: 10.2, carbs: 3.6, fat: 0.4 },
+    { name: "Yaourt grec nature", portion: "150 g", cal: 97, prot: 9.0, carbs: 3.8, fat: 5.0 },
+    { name: "Skyr", portion: "150 g", cal: 63, prot: 11.0, carbs: 4.0, fat: 0.2 },
+    { name: "Fromage blanc 0%", portion: "100 g", cal: 47, prot: 7.5, carbs: 4.0, fat: 0.1 },
+    { name: "Fromage blanc 20%", portion: "100 g", cal: 75, prot: 7.0, carbs: 3.5, fat: 3.0 },
+    { name: "Fromage blanc 40%", portion: "100 g", cal: 116, prot: 6.5, carbs: 3.0, fat: 8.0 },
+    { name: "Petit-suisse nature", portion: "60 g", cal: 115, prot: 7.5, carbs: 4.5, fat: 7.0 },
+    { name: "Emmental", portion: "30 g", cal: 382, prot: 28.5, carbs: 0.4, fat: 29.0 },
+    { name: "Mozzarella", portion: "30 g", cal: 280, prot: 19.0, carbs: 2.2, fat: 22.0 },
+    { name: "Chèvre frais", portion: "30 g", cal: 210, prot: 11.0, carbs: 2.5, fat: 18.0 },
+    { name: "Feta", portion: "30 g", cal: 264, prot: 14.0, carbs: 4.0, fat: 21.0 },
+    { name: "Ricotta", portion: "50 g", cal: 174, prot: 11.3, carbs: 3.0, fat: 13.0 },
+    { name: "Cottage cheese", portion: "100 g", cal: 98, prot: 11.1, carbs: 3.4, fat: 4.3 },
+    { name: "Lait d'amande", portion: "250 ml", cal: 17, prot: 0.4, carbs: 0.3, fat: 1.1 },
+    { name: "Lait de soja", portion: "250 ml", cal: 54, prot: 3.3, carbs: 6.3, fat: 1.8 },
+    { name: "Lait d'avoine", portion: "250 ml", cal: 47, prot: 1.0, carbs: 7.0, fat: 1.5 }
+  ],
+  "Viande, poisson, œufs": [
+    { name: "Blanc de poulet", portion: "150 g", cal: 165, prot: 31.0, carbs: 0, fat: 3.6 },
+    { name: "Cuisses de poulet", portion: "150 g", cal: 209, prot: 26.0, carbs: 0, fat: 11.0 },
+    { name: "Dinde (escalope)", portion: "150 g", cal: 135, prot: 29.0, carbs: 0, fat: 1.0 },
+    { name: "Bœuf (steak)", portion: "150 g", cal: 250, prot: 26.0, carbs: 0, fat: 15.0 },
+    { name: "Bœuf haché 5%", portion: "150 g", cal: 137, prot: 21.0, carbs: 0, fat: 5.0 },
+    { name: "Bœuf haché 15%", portion: "150 g", cal: 250, prot: 26.0, carbs: 0, fat: 15.0 },
+    { name: "Porc (côtelette)", portion: "150 g", cal: 242, prot: 27.3, carbs: 0, fat: 14.0 },
+    { name: "Jambon blanc", portion: "50 g", cal: 115, prot: 19.0, carbs: 1.0, fat: 3.5 },
+    { name: "Jambon cru", portion: "50 g", cal: 145, prot: 26.0, carbs: 0.5, fat: 4.0 },
+    { name: "Saucisse", portion: "100 g", cal: 301, prot: 13.0, carbs: 1.5, fat: 27.0 },
+    { name: "Bacon", portion: "30 g", cal: 541, prot: 37.0, carbs: 1.4, fat: 42.0 },
+    { name: "Saumon frais", portion: "150 g", cal: 208, prot: 20.0, carbs: 0, fat: 13.0 },
+    { name: "Saumon fumé", portion: "50 g", cal: 117, prot: 18.3, carbs: 0, fat: 4.5 },
+    { name: "Thon frais", portion: "150 g", cal: 144, prot: 23.3, carbs: 0, fat: 4.9 },
+    { name: "Thon en boîte (eau)", portion: "80 g", cal: 116, prot: 26.0, carbs: 0, fat: 0.8 },
+    { name: "Thon en boîte (huile)", portion: "80 g", cal: 198, prot: 25.0, carbs: 0, fat: 10.0 },
+    { name: "Cabillaud", portion: "150 g", cal: 82, prot: 18.0, carbs: 0, fat: 0.7 },
+    { name: "Sardines en boîte", portion: "100 g", cal: 208, prot: 25.0, carbs: 0, fat: 11.0 },
+    { name: "Crevettes", portion: "100 g", cal: 99, prot: 24.0, carbs: 0.2, fat: 0.3 },
+    { name: "Œuf entier", portion: "60 g", cal: 155, prot: 13.0, carbs: 1.1, fat: 11.0 },
+    { name: "Blanc d'œuf", portion: "30 g", cal: 52, prot: 11.0, carbs: 0.7, fat: 0.2 },
+    { name: "Tofu nature", portion: "100 g", cal: 76, prot: 8.0, carbs: 1.9, fat: 4.8 },
+    { name: "Tempeh", portion: "100 g", cal: 193, prot: 19.0, carbs: 9.0, fat: 11.0 },
+    { name: "Seitan", portion: "100 g", cal: 370, prot: 75.0, carbs: 14.0, fat: 1.9 }
+  ],
+  "Céréales et féculents": [
+    { name: "Pain blanc", portion: "50 g", cal: 265, prot: 9.0, carbs: 49.0, fat: 3.2 },
+    { name: "Pain complet", portion: "50 g", cal: 247, prot: 13.0, carbs: 41.0, fat: 3.4 },
+    { name: "Pain de mie", portion: "50 g", cal: 269, prot: 8.9, carbs: 49.0, fat: 3.3 },
+    { name: "Baguette", portion: "50 g", cal: 280, prot: 9.0, carbs: 55.0, fat: 1.5 },
+    { name: "Pâtes crues", portion: "80 g", cal: 371, prot: 13.0, carbs: 75.0, fat: 1.5 },
+    { name: "Pâtes cuites", portion: "200 g", cal: 131, prot: 5.0, carbs: 25.0, fat: 0.9 },
+    { name: "Pâtes complètes crues", portion: "80 g", cal: 348, prot: 13.4, carbs: 72.0, fat: 2.5 },
+    { name: "Riz blanc cuit", portion: "200 g", cal: 130, prot: 2.7, carbs: 28.0, fat: 0.3 },
+    { name: "Riz complet cuit", portion: "200 g", cal: 111, prot: 2.6, carbs: 23.0, fat: 0.9 },
+    { name: "Riz basmati cuit", portion: "200 g", cal: 121, prot: 3.5, carbs: 25.0, fat: 0.4 },
+    { name: "Quinoa cuit", portion: "150 g", cal: 120, prot: 4.4, carbs: 21.3, fat: 1.9 },
+    { name: "Boulgour cuit", portion: "150 g", cal: 83, prot: 3.1, carbs: 18.6, fat: 0.2 },
+    { name: "Couscous cuit", portion: "150 g", cal: 112, prot: 3.8, carbs: 23.0, fat: 0.2 },
+    { name: "Semoule cuite", portion: "150 g", cal: 110, prot: 3.5, carbs: 23.0, fat: 0.3 },
+    { name: "Flocons d'avoine", portion: "50 g", cal: 389, prot: 16.9, carbs: 66.3, fat: 6.9 },
+    { name: "Muesli", portion: "50 g", cal: 450, prot: 11.0, carbs: 65.0, fat: 15.0 },
+    { name: "Corn flakes", portion: "50 g", cal: 357, prot: 7.5, carbs: 84.0, fat: 0.9 },
+    { name: "Pomme de terre cuite", portion: "150 g", cal: 86, prot: 1.9, carbs: 20.0, fat: 0.1 },
+    { name: "Patate douce cuite", portion: "150 g", cal: 90, prot: 2.0, carbs: 21.0, fat: 0.2 },
+    { name: "Lentilles cuites", portion: "150 g", cal: 116, prot: 9.0, carbs: 20.0, fat: 0.4 },
+    { name: "Pois chiches cuits", portion: "150 g", cal: 164, prot: 8.9, carbs: 27.0, fat: 2.6 },
+    { name: "Haricots rouges cuits", portion: "150 g", cal: 127, prot: 8.7, carbs: 22.8, fat: 0.5 },
+    { name: "Haricots blancs cuits", portion: "150 g", cal: 139, prot: 9.7, carbs: 25.0, fat: 0.5 }
+  ],
+  "Fruits et légumes": [
+    { name: "Banane", portion: "120 g", cal: 89, prot: 1.1, carbs: 23.0, fat: 0.3 },
+    { name: "Pomme", portion: "150 g", cal: 52, prot: 0.3, carbs: 14.0, fat: 0.2 },
+    { name: "Orange", portion: "150 g", cal: 47, prot: 0.9, carbs: 12.0, fat: 0.1 },
