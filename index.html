@@ -5,6 +5,7 @@
 <title>Calculateur Nutrition Sportif</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+  /* Votre CSS reste inchangé */
   * {
     box-sizing: border-box;
   }
@@ -373,8 +374,8 @@
 let chartInstance = null;
 
 // Charger l'historique au démarrage
-window.addEventListener('DOMContentLoaded', async () => {
-  await chargerHistorique();
+window.addEventListener('DOMContentLoaded', () => {
+  chargerHistorique();
 });
 
 // Validation des champs
@@ -408,7 +409,7 @@ function validerChamps() {
   return valide;
 }
 
-async function calcul(objectif) {
+function calcul(objectif) {
   if (!validerChamps()) {
     return;
   }
@@ -465,10 +466,10 @@ async function calcul(objectif) {
   `;
 
   // Sauvegarder dans l'historique
-  await ajouterHistorique(poids, calTot, objectif);
+  ajouterHistorique(poids, calTot, objectif);
 }
 
-async function ajouterHistorique(poids, calories, objectif) {
+function ajouterHistorique(poids, calories, objectif) {
   try {
     const date = new Date().toLocaleString('fr-FR', { 
       day: '2-digit', 
@@ -480,13 +481,9 @@ async function ajouterHistorique(poids, calories, objectif) {
     
     // Récupérer l'historique existant
     let historique = [];
-    try {
-      const result = await window.storage.get('nutrition-historique');
-      if (result && result.value) {
-        historique = JSON.parse(result.value);
-      }
-    } catch (e) {
-      // Pas d'historique existant
+    const historiqueStr = localStorage.getItem('nutrition-historique');
+    if (historiqueStr) {
+      historique = JSON.parse(historiqueStr);
     }
     
     // Ajouter la nouvelle entrée
@@ -498,23 +495,23 @@ async function ajouterHistorique(poids, calories, objectif) {
     }
     
     // Sauvegarder
-    await window.storage.set('nutrition-historique', JSON.stringify(historique));
+    localStorage.setItem('nutrition-historique', JSON.stringify(historique));
     
     // Rafraîchir l'affichage
-    await chargerHistorique();
+    chargerHistorique();
   } catch (error) {
     console.error('Erreur sauvegarde:', error);
   }
 }
 
-async function chargerHistorique() {
+function chargerHistorique() {
   try {
-    const result = await window.storage.get('nutrition-historique');
-    if (!result || !result.value) {
+    const historiqueStr = localStorage.getItem('nutrition-historique');
+    if (!historiqueStr) {
       return;
     }
     
-    const historique = JSON.parse(result.value);
+    const historique = JSON.parse(historiqueStr);
     const tbody = document.getElementById('historique').querySelector('tbody');
     tbody.innerHTML = '';
     
@@ -593,10 +590,10 @@ function mettreAJourGraphique(historique) {
   });
 }
 
-async function effacerHistorique() {
+function effacerHistorique() {
   if (confirm('Êtes-vous sûr de vouloir effacer tout l\'historique ?')) {
     try {
-      await window.storage.delete('nutrition-historique');
+      localStorage.removeItem('nutrition-historique');
       document.getElementById('historique').querySelector('tbody').innerHTML = '';
       document.getElementById('chart-section').style.display = 'none';
       if (chartInstance) {
@@ -610,15 +607,15 @@ async function effacerHistorique() {
   }
 }
 
-async function exporterHistorique() {
+function exporterHistorique() {
   try {
-    const result = await window.storage.get('nutrition-historique');
-    if (!result || !result.value) {
+    const historiqueStr = localStorage.getItem('nutrition-historique');
+    if (!historiqueStr) {
       alert('Aucun historique à exporter');
       return;
     }
     
-    const historique = JSON.parse(result.value);
+    const historique = JSON.parse(historiqueStr);
     let csv = 'Date,Poids (kg),Calories (kcal),Objectif\n';
     historique.forEach(entry => {
       csv += `${entry.date},${entry.poids},${entry.calories},${entry.objectif}\n`;
