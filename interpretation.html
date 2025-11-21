@@ -610,4 +610,130 @@ const foodDatabase = {
   "Fruits et légumes": [
     { name: "Banane", portion: "120 g", cal: 89, prot: 1.1, carbs: 23.0, fat: 0.3 },
     { name: "Pomme", portion: "150 g", cal: 52, prot: 0.3, carbs: 14.0, fat: 0.2 },
-    { name: "Orange", portion: "150 g", cal: 47, prot: 0.9, carbs: 12.0, fat: 0.1 },
+    { name: "Orange", portion: "150 g", cal: 47, prot: 0.9, carbs: 12.0, fat: 0.1 }
+   ],
+ <script>
+// -----------------------------
+// ACCORDÉONS
+// -----------------------------
+document.querySelectorAll(".accordion-header").forEach(header => {
+  header.addEventListener("click", () => {
+    header.classList.toggle("active");
+    const panel = header.nextElementSibling;
+    panel.classList.toggle("show");
+  });
+});
+
+// -----------------------------
+// GÉNÉRATION DES TABLEAUX
+// -----------------------------
+function generateTables() {
+  Object.keys(foodDatabase).forEach(category => {
+    const accordion = document.querySelector(`.accordion[data-category="${category}"]`);
+    if (!accordion) return;
+
+    const tbody = accordion.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    foodDatabase[category].forEach(food => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="food-name">${food.name}</td>
+        <td>${food.portion}</td>
+        <td>${food.cal}</td>
+        <td>${food.prot}</td>
+        <td>${food.carbs}</td>
+        <td>${food.fat}</td>
+        <td><input type="number" min="0" value="0" data-food="${food.name}" /></td>
+        <td><button class="btn-clear" data-clear="${food.name}">Effacer</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+  });
+}
+
+// -----------------------------
+// CALCULS
+// -----------------------------
+function recalcTotals() {
+  let totalCal = 0, totalProt = 0, totalCarbs = 0, totalFat = 0;
+
+  document.querySelectorAll("input[type='number']").forEach(input => {
+    const value = parseFloat(input.value) || 0;
+    if (value <= 0) return;
+
+    Object.values(foodDatabase).flat().forEach(item => {
+      if (item.name === input.dataset.food) {
+        const factor = value / 100;
+        totalCal += item.cal * factor;
+        totalProt += item.prot * factor;
+        totalCarbs += item.carbs * factor;
+        totalFat += item.fat * factor;
+      }
+    });
+  });
+
+  document.getElementById("total-cal").textContent = Math.round(totalCal);
+  document.getElementById("total-prot").textContent = Math.round(totalProt);
+  document.getElementById("total-carbs").textContent = Math.round(totalCarbs);
+  document.getElementById("total-fats").textContent = Math.round(totalFat);
+}
+
+document.addEventListener("input", e => {
+  if (e.target.matches("input[type='number']")) recalcTotals();
+});
+
+// -----------------------------
+// EFFACER LIGNE
+// -----------------------------
+document.addEventListener("click", e => {
+  if (e.target.dataset.clear) {
+    const food = e.target.dataset.clear;
+    const input = document.querySelector(`input[data-food="${food}"]`);
+    if (input) input.value = 0;
+    recalcTotals();
+  }
+});
+
+// -----------------------------
+// SEARCH BAR
+// -----------------------------
+document.getElementById("searchInput").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll("tbody tr").forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? "" : "none";
+  });
+});
+
+// -----------------------------
+// RESET
+// -----------------------------
+function resetAll() {
+  document.querySelectorAll("input[type='number']").forEach(i => i.value = 0);
+  recalcTotals();
+}
+
+// -----------------------------
+// HISTORIQUE (LOCALSTORAGE)
+// -----------------------------
+function saveToHistory() {
+  const entry = {
+    date: new Date().toLocaleString(),
+    cal: document.getElementById("total-cal").textContent,
+    prot: document.getElementById("total-prot").textContent,
+    carbs: document.getElementById("total-carbs").textContent,
+    fats: document.getElementById("total-fats").textContent
+  };
+
+  const history = JSON.parse(localStorage.getItem("foodHistory") || "[]");
+  history.push(entry);
+  localStorage.setItem("foodHistory", JSON.stringify(history));
+  alert("Journée sauvegardée.");
+}
+
+// -----------------------------
+// INIT
+// -----------------------------
+generateTables();
+</script>
+
